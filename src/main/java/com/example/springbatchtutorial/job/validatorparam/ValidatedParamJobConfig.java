@@ -21,14 +21,14 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 /**
  * 파일 이름 파라미터 전달 / 검증
- * --spring.batch.job.name=validatedParamJob --fileName=test.csv
+ * --spring.batch.job.name=validatedParamJob fileName=test.csv
  *
  */
 @Slf4j
 @Configuration
 public class ValidatedParamJobConfig {
     @Bean
-    public Job validatedParamJob(JobRepository jobRepository, Step validatedParamStep, PlatformTransactionManager platformTransactionManager) {
+    public Job validatedParamJob(JobRepository jobRepository, Step validatedParamStep) {
         return new JobBuilder("validatedParamJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
                 .validator(new FileParamValidator())
@@ -45,7 +45,7 @@ public class ValidatedParamJobConfig {
 
     @StepScope
     @Bean
-    public Tasklet validatedParamTasklet(@Value("#{jobParameters['fileName']}") String fileName) {
+    public Tasklet validatedParamTasklet(@Value("#{JobParameters[fileName]}")String fileName) {
         return new Tasklet() {
             @Override
             public RepeatStatus execute(final StepContribution contribution, final ChunkContext chunkContext) throws Exception {
