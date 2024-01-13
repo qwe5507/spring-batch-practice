@@ -7,6 +7,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.job.CompositeJobParametersValidator;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
@@ -18,6 +19,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
+
+import java.util.Arrays;
 
 /**
  * 파일 이름 파라미터 전달 / 검증
@@ -31,9 +34,16 @@ public class ValidatedParamJobConfig {
     public Job validatedParamJob(JobRepository jobRepository, Step validatedParamStep) {
         return new JobBuilder("validatedParamJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
-                .validator(new FileParamValidator())
+                .validator(multipleValidator())
                 .start(validatedParamStep)
                 .build();
+    }
+
+    private CompositeJobParametersValidator multipleValidator() {
+        final CompositeJobParametersValidator validator = new CompositeJobParametersValidator();
+        validator.setValidators(Arrays.asList(new FileParamValidator()));
+
+        return validator;
     }
 
     @JobScope
