@@ -43,8 +43,8 @@ public class JobListenerConfig {
             @Override
             public RepeatStatus execute(final StepContribution contribution, final ChunkContext chunkContext) throws Exception {
                 System.out.println("Job Listener Tasklet");
-                throw new Exception("Failed");
-//                return RepeatStatus.FINISHED;
+//                throw new Exception("Failed");
+                return RepeatStatus.FINISHED;
             }
         };
     }
