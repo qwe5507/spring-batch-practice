@@ -52,7 +52,7 @@ public class TrMigrationConfig {
 
     @JobScope
     @Bean
-    public Step trMigrationStep(JobRepository jobRepository, Tasklet jobListenerTasklet,
+    public Step trMigrationStep(JobRepository jobRepository,
                                 PlatformTransactionManager platformTransactionManager,
                                 ItemReader trOrdersReader,
                                 ItemProcessor trOrderProcessor,
@@ -80,18 +80,18 @@ public class TrMigrationConfig {
                 .build();
     }
 
-    @StepScope
-    @Bean
-    public ItemWriter<Accounts> trOrdersWriter2() {
-        return new ItemWriter<Accounts>() {
-            @Override
-            public void write(final Chunk<? extends Accounts> chunk) throws Exception {
-                chunk.forEach(item -> {
-                    accountsRepository.save(item);
-                });
-            }
-        };
-    }
+//    @StepScope
+//    @Bean
+//    public ItemWriter<Accounts> trOrdersWriter2() {
+//        return new ItemWriter<Accounts>() {
+//            @Override
+//            public void write(final Chunk<? extends Accounts> chunk) throws Exception {
+//                chunk.forEach(item -> {
+//                    accountsRepository.save(item);
+//                });
+//            }
+//        };
+//    }
 
     @StepScope
     @Bean
